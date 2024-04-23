@@ -11,6 +11,7 @@ def index():
 # This route will serve all other static files
 @app.route('/<path:filename>')
 def serve_static(filename):
+    print(filename)
     return send_from_directory('', filename)
 
 if __name__ == '__main__':

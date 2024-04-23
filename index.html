@@ -141,10 +141,12 @@
     }
 
     function readyToLoad(csvFilePathLink) {
+        console.log("loading")
         if (csvFilePathLink.length > 0) {
             // remove the current selection
             unloadPageContent();
             d3.csv(csvFilePathLink, function (data) {
+                
                 loadDataToDesignExplorer(data);
                 loadSetting();
                 updateLayoutOnDeselect();
@@ -168,28 +170,30 @@
         
         // no img link
         if(file === 0 || file === undefined){
-            return "http://mingbopeng.github.io/DesignExplorer/img/thorntontomasetti.jpg";
+            return "https://www.somo.uk/wp-content/uploads/2019/08/sweco_logo_800x400.png";
         }
  
 
 
         if (file.startsWith("http")) {
             // file is a valid full Url path
-            // file: http://abcd.com/img01.png      
+            // file: http://abcd.com/img01.png
+            
             link = file;
             
         } else {        
             //loadImgfrom inputs
             // file: img01.png
-
+            
             if (_folderInfo.type === "userServerLink" ) {  //folder is on user's server
-                
+                console.log("loading server link");
                 link = _folderInfo.url + file;
 
             } else {                                       //folder is one GoogleDrive or OneDrive
-                
+                console.log(type);
                 if(type =="img"){
-                    link = _googleReturnObj.imgFiles[file];
+                    link = _folderInfo.url + file;
+                    // link = _googleReturnObj.imgFiles[file];
                     
                 }else if(type =="threeD"){
                     link = _googleReturnObj.jsonFiles[file];
@@ -200,6 +204,10 @@
                 }else if(type =="csv"){
                     link = _googleReturnObj.csvFiles[file];
                     
+                }
+                else{
+                    console.log(link);
+                    link = _folderInfo.url + file;
                 }
 
             }
@@ -343,12 +351,7 @@
                                     <button id="remove" class="btn btn-default btn-xs">Exclude Selection</button>
                                     <button id="keep" class="btn btn-default btn-xs">Zoom to Selection</button>
                                     <button id="savecsv" class="btn btn-default btn-xs" onclick="saveToCSV()">Save Selection to File</button>
-                                    <button id="stilllink" class="btn btn-default btn-xs" onclick="showStillLink()">My Static Link</button>
-                                    <a class="btn btn-default btn-xs" href="http://www.mpendesign.com/category/tutorial/" target="_blank">Tutorial</a>
-                                    <a class="btn btn-default btn-xs" href="https://www.thorntontomasetti.com/services/sustainability/" target="_blank">Services</a>
-                                    <a href="https://github.com/tt-acm/DesignExplorer/wiki" class="btn btn-default btn-xs" target="_blank">
-                                        Info <span class="glyphicon glyphicon-new-window"></span>
-                                    </a>
+
 
                                     <!-- Change label size -->
                                     <div class="btn-group col-xs-3" style="width: auto;float: right;">
@@ -382,12 +385,7 @@
                                     <button type="button" class="btn btn-default btn-xs" id="scatter-fullscreen-toggle" title="Full Screen">
                                         <span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span>
                                     </button>
-                                    <a id="copyRightButton" href="http://core.thorntontomasetti.com/" class="btn btn-default btn-xs" target="_blank" style="width: calc(100% - 46px);">
-                                        &copy; 2019 Thornton Tomasetti
-                                    </a>
-                                    <!--<button type="button" class="btn btn-default btn-xs" id="rcgraph" data-toggle="collapse" data-target="#radarChart">
-                                        <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
-                                    </button>-->
+
                                     <button type="button" class="btn btn-default btn-xs" id="scatter-menu-toggle" title="Show Dimensions">
                                         <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
                                     </button>
@@ -503,7 +501,7 @@
                         <br>
                         <br>
                     </div>
-                    <div class="col-lg-12" style="position: absolute;bottom: 2em;width: calc(100% - 60px);">
+                    <!-- <div class="col-lg-12" style="position: absolute;bottom: 2em;width: calc(100% - 60px);">
                         <h3 class="text-center"> Happy Exploring! </h3>
                         <h5 class="text-center">v2 (08/15/2019)</h5>
                         <br>
@@ -517,7 +515,7 @@
                             Updated by
                             <a href="http://www.mpendesign.com" target="_blank">Mingbo Peng</a>
                         </h5>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!--load data div-->
@@ -535,8 +533,8 @@
                         <input type="text" id="folderLinkID" class="btn btn-default btn-hd" name="imgfolder" placeholder="FolderID" />
                         <button id="loadData" onclick="MP_getGoogleIDandLoad()" class="file-upload" style="border-radius:0 20px 20px 0;">Load Data</button>
                     </p>
-                    <h5 class="text-center" style="color: #9d9d9d;">Please put data.csv, images, and 3D-json files into the same folder.(<a href="design_explorer_data/example/online/example.zip"
-                            target="_blank">example.zip</a>)</h5>
+                    <!-- <h5 class="text-center" style="color: #9d9d9d;">Please put data.csv, images, and 3D-json files into the same folder.(<a href="design_explorer_data/example/online/example.zip"
+                            target="_blank">example.zip</a>)</h5> -->
                     
                     <div id="loadFileLocally">
                         <h4 class="text-center" style="margin: 60px 0 60px 0;">
@@ -545,7 +543,7 @@
                         <p class="text-center">
                             <input type="file" id="csv-file" class="btn btn-default btn-sm" name="files">
                         </p>
-                        <h5 class="text-center" style="color: #9d9d9d;">Please put valid images and 3D-json files URL. (Example:<a href="design_explorer_data/example/LocalCSV_example.csv" target="_blank">data.csv</a>)</h5>
+                        <!-- <h5 class="text-center" style="color: #9d9d9d;">Please put valid images and 3D-json files URL. (Example:<a href="design_explorer_data/example/LocalCSV_example.csv" target="_blank">data.csv</a>)</h5> -->
                     </div>
                     
                 </div>
@@ -1969,7 +1967,8 @@
     <!-- import data  //  onload functions to close intro window and read input data -->
     <script>
         function loadDataToDesignExplorer(data) {
-
+            console.log("Loading data into design explorer")
+            console.log(data)
             overwriteInitialGlobalValues();
 
             // analyze data and separate them as input/output and general data

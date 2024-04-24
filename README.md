@@ -26,7 +26,7 @@ pip install -r requirements.txt
 # I prefer you'd run this using waitress and not flask, for generallity's sake, the app is setup to run as such
 python app.py
 ```
-## Datatstore
+## Datastore
 This server EXPECTS a datastore server to exist that can send images/json and csv data to the client. This datastore has to serve this content over http requests. It could also be that CORS has to be enabled to properly run this, but in the current stage that might not be necesarry.
 
 ## URL queries

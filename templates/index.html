@@ -176,52 +176,12 @@
         let dataHost = '{{ host }}'
         let dataPath = '{{ document_uri }}'
 
-        // let itemPath = `${dataHost}/${dataPath}` + _folderInfo.url + file;
+        
         let itemPath = `${dataHost}/${dataPath}` + file;
                     
         // console.log(itemPath);
         return itemPath;
 
-        if (file.startsWith("http")) {
-            // file is a valid full Url path
-            // file: http://abcd.com/img01.png
-            
-            link = file;
-            
-        } else {        
-            //loadImgfrom inputs
-            // file: img01.png
-            
-            if (_folderInfo.type === "userServerLink" ) {  //folder is on user's server
-                console.log("loading server link");
-                link = _folderInfo.url + file;
-
-            } else {                                       //folder is one GoogleDrive or OneDrive
-                console.log(type);
-                if(type =="img"){
-                    link = _folderInfo.url + file;
-                    // link = _googleReturnObj.imgFiles[file];
-                    
-                }else if(type =="threeD"){
-                    link = _folderInfo.url + file;
-                    // link = _googleReturnObj.jsonFiles[file];
-                    
-                }else if(type =="setting"){
-                    link = _googleReturnObj.settingFiles[file];
-                    
-                }else if(type =="csv"){
-                    link = _googleReturnObj.csvFiles[file];
-                    
-                }
-                else{
-                    console.log(link);
-                    link = _folderInfo.url + file;
-                }
-
-            }
-        }
-
-        return link;
     }
 
 
@@ -2103,12 +2063,13 @@
                         }
                     }
                 if(loadDefault){
-                    console.log("loading default")
+                    console.log("loading default yo")
                     // if no query params
                 // load default data
-
+                    let dataCsvLocation = `${data_host}/${data_uri}/DefaultData/data.csv`
+                    console.log(dataCsvLocation);
                     //parse the csv data from the design_explorer_data folder
-                    d3.csv("design_explorer_data/default_onload.csv", function (data) {
+                    d3.csv(dataCsvLocation, function (data) {
                         loadDataToDesignExplorer(data);
                         loadSetting("design_explorer_data/DefaultData/settings.json");
                         });

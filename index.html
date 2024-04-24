@@ -2028,6 +2028,22 @@
             // });
         }
 
+        function fileExists(path){
+            fetch(path, { method: "HEAD" }) 
+            .then(response => { 
+                if (response.ok) { 
+                    console.log("File exists"); 
+                    return true;
+                } else { 
+                    console.log("File does not exist"); 
+                    return false;
+                } 
+            }) 
+            .catch(error => { 
+                console.log("An error occurred: ", error); 
+                return false;
+            }); 
+        }
 
         window.onload = function () {
             var isIE = /*@cc_on!@*/false || !!document.documentMode;
@@ -2046,26 +2062,34 @@
                 console.log(window.location)
                 let targetDocument=  searchparams.get("document");
                 // console.log(window.location.href)
-
+                let loadDefault = true;
                 
                 if(targetDocument){
+                    loadDefault = false;
                     let csvPath = `${window.location.origin}/designexplorer_data/${targetDocument}/data.csv`;
-                    console.log(`reading csv: ${csvPath}`)
-                    d3.csv(csvPath, function (data) {
-                    loadDataToDesignExplorer(data);
-                    loadSetting("design_explorer_data/DefaultData/settings.json");
-                    });
-                }
-                else{
+                    if(!fileExists(csvPath)){
+                        console.log("Failed to load csv")
+                        loadDefault = true;
+                    }
+                    else{
+                        console.log(`reading csv: ${csvPath}`)
+                        d3.csv(csvPath, function (data) {
+                            loadDataToDesignExplorer(data);
+                            loadSetting("design_explorer_data/DefaultData/settings.json");
+                            });
+                        }
+                    }
+                if(loadDefault){
+                    console.log("loading default")
                     // if no query params
                 // load default data
 
-                //parse the csv data from the design_explorer_data folder
-                d3.csv("design_explorer_data/default_onload.csv", function (data) {
-                    loadDataToDesignExplorer(data);
-                    loadSetting("design_explorer_data/DefaultData/settings.json");
-                    });
-                }
+                    //parse the csv data from the design_explorer_data folder
+                    d3.csv("design_explorer_data/default_onload.csv", function (data) {
+                        loadDataToDesignExplorer(data);
+                        loadSetting("design_explorer_data/DefaultData/settings.json");
+                        });
+                    }
 
 
             }

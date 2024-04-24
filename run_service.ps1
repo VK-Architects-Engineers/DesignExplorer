@@ -1,5 +1,5 @@
 git fetch
 git pull
 .\venv\Scripts\activate
-pip install flask
+pip -r requirements.txt
 python app.py

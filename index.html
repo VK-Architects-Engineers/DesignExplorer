@@ -2043,12 +2043,15 @@
             } else {
                 let searchparams = new URLSearchParams(window.location.search);
                 // console.log(searchparams.get("document"));
+                console.log(window.location)
                 let targetDocument=  searchparams.get("document");
                 // console.log(window.location.href)
 
                 
                 if(targetDocument){
-                    d3.csv(`/design_explorerdata/${targetDocument}/data.csv`, function (data) {
+                    let csvPath = `${window.location.origin}/design_explorerdata/${targetDocument}/data.csv`;
+                    console.log(`reading csv: ${csvPath}`)
+                    d3.csv(csvPath, function (data) {
                     loadDataToDesignExplorer(data);
                     loadSetting("design_explorer_data/DefaultData/settings.json");
                     });

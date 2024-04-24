@@ -2410,12 +2410,18 @@
             var viewerId = "viewer3d";
 
             //load JSON file
+            console.log("Loading JSON data");
+            console.log(jsonFileAddress);
+
             d3.json(jsonFileAddress, function (data) {
                 //Initialize a VA3C viewer
+                console.log("Loading SPECTACLES file")
+                console.log(data)
                 va3cViewer = new SPECTACLES($("#" + viewerId), data, function (app) {
                     //call the UI / functionality modules
                     app.setBackgroundColor(0xFFFFFF);
                 });
+                console.log("Loaded!")
             });
         }
 

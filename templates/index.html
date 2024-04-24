@@ -176,7 +176,8 @@
         let dataHost = '{{ host }}'
         let dataPath = '{{ document_uri }}'
 
-        let itemPath = `${dataHost}/${dataPath}` + _folderInfo.url + file;
+        // let itemPath = `${dataHost}/${dataPath}` + _folderInfo.url + file;
+        let itemPath = `${dataHost}/${dataPath}` + file;
                     
         // console.log(itemPath);
         return itemPath;

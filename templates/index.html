@@ -2004,21 +2004,46 @@
             // });
         }
 
+        function loadDataCsv(datapath){
+
+        }
+
+        function loadDefault(){
+            console.log("Loading Default")
+
+            let data_host = "{{ host }}";
+            let data_uri = "{{ document_uri }}";
+            let dataCsvLocation = `${data_host}/${data_uri}/DefaultData/data.csv`
+            d3.csv(dataCsvLocation, function (data) {
+                loadDataToDesignExplorer(data);
+                loadSetting("design_explorer_data/DefaultData/settings.json");
+                });
+        }
         function fileExists(path){
-            fetch(path, { method: "HEAD" }) 
+            
+            return fetch(path, { method: "HEAD" }) 
             .then(response => { 
+                
+                r = {}
+                console.log(path)
+                r.path = path;
+                r.exists = false;
+                
+
                 if (response.ok) { 
                     console.log("File exists"); 
-                    return true;
+                    r.exists = true
+                    return r;
                 } else { 
                     console.log("File does not exist"); 
-                    return false;
+                    return r;
                 } 
             }) 
             .catch(error => { 
                 console.log("An error occurred: ", error); 
-                return false;
+                return r;
             }); 
+        
         }
 
         window.onload = function () {
@@ -2034,45 +2059,37 @@
                 MP_getGoogleIDandLoad("URL");
             } else {
                 let searchparams = new URLSearchParams(window.location.search);
-                // console.log(searchparams.get("document"));
+                
                 let data_host = "{{ host }}";
                 let data_uri = "{{ document_uri }}";
                 
-                
-                // console.log(window.location)
                 let targetDocument=  searchparams.get("document");
-                // console.log(window.location.href)
-                let loadDefault = true;
                 
+                
+                console.log("loading " +  targetDocument)
                 if(targetDocument){
+                    
                     let dataCsvLocation = `${data_host}/${data_uri}/${targetDocument}/data.csv`
-                    console.log(`Looking for ${dataCsvLocation}`);
-
-                    // let csvPath = `${window.location.origin}/designexplorer_data/${targetDocument}/data.csv`;
-                    if(fileExists(dataCsvLocation) ==false){
-                        console.log("Failed to load csv")
-                        loadDefault = true;
-                    }
-                    else{
-                        loadDefault = false;
-                        console.log(`reading csv: ${dataCsvLocation}`)
-                        d3.csv(dataCsvLocation, function (data) {
+                    
+                    fileExists(dataCsvLocation).then(resp=>{
+                        let defaultsFile = `${data_host}/${data_uri}/DefaultData/settings.json`
+                        
+                        if(resp.exists){
+                            console.log("Loading from document")
+                            d3.csv(resp.path, function (data) {
                             loadDataToDesignExplorer(data);
-                            loadSetting("design_explorer_data/DefaultData/settings.json");
+                            loadSetting(defaultsFile);
                             });
                         }
+                        else{
+                        console.log("Failed to load csv")
+                        window.alert("No data found for document " + targetDocument + ", loading default dataset instead" )
+                        loadDefault();
                     }
-                if(loadDefault){
-                    console.log("loading default yo")
-                    // if no query params
-                // load default data
-                    let dataCsvLocation = `${data_host}/${data_uri}/DefaultData/data.csv`
-                    console.log(dataCsvLocation);
-                    //parse the csv data from the design_explorer_data folder
-                    d3.csv(dataCsvLocation, function (data) {
-                        loadDataToDesignExplorer(data);
-                        loadSetting("design_explorer_data/DefaultData/settings.json");
-                        });
+                    });
+                    }
+                    else{
+                        loadDefault();
                     }
 
 
@@ -2930,6 +2947,7 @@
             
             //set marks based on global _userSetting
             d3.keys(_userSetting.dimMark).forEach( function (d) {
+                // console.log(d)
                     setMarkOnDim(chart, d, _userSetting.dimMark[d]);
             })
         }

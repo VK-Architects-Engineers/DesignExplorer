@@ -2049,7 +2049,7 @@
 
                 
                 if(targetDocument){
-                    let csvPath = `${window.location.origin}/design_explorerdata/${targetDocument}/data.csv`;
+                    let csvPath = `${window.location.origin}/designexplorer_data/${targetDocument}/data.csv`;
                     console.log(`reading csv: ${csvPath}`)
                     d3.csv(csvPath, function (data) {
                     loadDataToDesignExplorer(data);

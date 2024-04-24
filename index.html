@@ -196,7 +196,8 @@
                     // link = _googleReturnObj.imgFiles[file];
                     
                 }else if(type =="threeD"){
-                    link = _googleReturnObj.jsonFiles[file];
+                    link = _folderInfo.url + file;
+                    // link = _googleReturnObj.jsonFiles[file];
                     
                 }else if(type =="setting"){
                     link = _googleReturnObj.settingFiles[file];
@@ -2405,7 +2406,8 @@
 
         // Initiate 3D viewer
         function initiate3DViewer() {
-
+            console.log("Graph")
+            console.log(graph.highlighted());
             var jsonFileAddress = makeUrl(graph.highlighted()[0].threeD,"threeD");
             var viewerId = "viewer3d";
 
